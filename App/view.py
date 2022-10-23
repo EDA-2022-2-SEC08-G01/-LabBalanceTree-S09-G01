@@ -53,6 +53,8 @@ def printMenu():
     print("3- Consultar crimenes en un rango de fechas")
     print("4- Consultar crimenes por codigo y fecha")
     # TODO lab 9, agregar opcion 5 en el menu, consultar por REPORTING_AREA
+    print("5- Consultar crimenes por area reportada")
+
     print("0- Salir")
     print("*******************************************")
 

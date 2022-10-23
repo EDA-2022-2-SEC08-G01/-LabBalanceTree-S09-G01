@@ -55,12 +55,16 @@ def newAnalyzer():
     analyzer = {"crimes": None,
                 "dateIndex": None,
                 "areaIndex": None,
+
                 }
 
     analyzer["crimes"] = lt.newList("SINGLE_LINKED", compareIds)
-    analyzer["dateIndex"] = om.newMap(omaptype="BST",
+    analyzer["dateIndex"] = om.newMap(omaptype="RBT",
                                       comparefunction=compareDates)
     # TODO lab 9, crear el indice ordenado por areas reportadas
+    analyzer["areaIndex"] = om.newMap(omaptype="RBT",
+                                      comparefunction=compareAreas)
+
     return analyzer
 
 
@@ -74,6 +78,7 @@ def addCrime(analyzer, crime):
     lt.addLast(analyzer["crimes"], crime)
     updateDateIndex(analyzer["dateIndex"], crime)
     # TODO lab 9, actualizar el indice por areas reportadas
+    updateAreaIndex(analyzer["areaIndex"], crime)
     return analyzer
 
 
@@ -85,12 +90,27 @@ def updateAreaIndex(map, crime):
     y si el area son ["", " ", None] se utiliza el valor por defecto 9999
     """
     # TODO lab 9, implementar actualizacion del indice por areas reportadas
+
+    occurredarea = crime["REPORTING_AREA"]
+    entry = om.get(map, occurredarea)
+
     # revisar si el area es un str vacio ["", " ", None]
-    # area desconocida es 9999
+    if occurredarea == ["", " ", None]:
+       areaentry = me.getValue(entry)
+       # area desconocida es 9999
+       om.put(map, occurredarea, "9999")
 
     # revisar si el area ya esta en el indice
+    elif entry is None:
+        areaentry = newDataEntry(crime)
+        # area desconocida es 9999
+        om.put(map, occurredarea, areaentry)
 
     # si el area ya esta en el indice, adicionar el crimen a la lista
+    else:
+        areaentry = me.getValue(entry)
+    addDateIndex(areaentry, crime)
+
     return map
 
 
