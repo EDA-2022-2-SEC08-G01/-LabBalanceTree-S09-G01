@@ -109,7 +109,7 @@ def indexHeightAreas(analyzer):
     Altura del indice de areas (arbol)
     """
     # TODO lab 9, completar el llamado de indexHeightAreas()
-    pass
+    return model.indexHeightAreas(analyzer)
 
 
 def indexSizeAreas(analyzer):
