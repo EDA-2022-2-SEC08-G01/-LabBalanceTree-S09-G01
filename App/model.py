@@ -295,13 +295,11 @@ def getCrimesByRangeArea(analyzer, initialArea, FinalArea):
     Retorna el numero de crimenes en un rango de areas
     """
     # TODO lab 9, completar la consulta de crimenes por rango de areas
-    crimearea = om.get(analyzer["areaIndex"], initialArea)
-    if crimearea["key"] is not None:
-        areamap = me.getValue(crimearea)["areaIndex"]
-        numarea = m.get(areamap, offensecode)
-        if numoffenses is not None:
-            return m.size(me.getValue(numoffenses)["lstoffenses"])
-    return 0
+    lst = om.values(analyzer["areaIndex"], initialArea, FinalArea)
+    totalcrimes = 0
+    for lstarea in lt.iterator(lst):
+        totalcrimes += lt.size(lstarea["lstcrimes"])
+    return totalcrimes
 
 
 def getCrimesByRange(analyzer, initialDate, finalDate):
