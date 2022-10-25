@@ -103,6 +103,12 @@ while True:
         print("\nBuscando crimenes en un rango de areas: ")
         print("Las areas estan numeradas con enteros (1 - 962)")
         print("Un area desconocida tiene el el numero 9999")
+        initialArea = input("Area Inicial: ")
+        FinalArea = input("Area Final: ")
+        total = controller.getCrimesByRangeArea(cont, initialArea, FinalArea)
+
+        print("\nTotal de crimenes en el rango de areas: " + str(total))
+
 
     else:
         sys.exit(0)

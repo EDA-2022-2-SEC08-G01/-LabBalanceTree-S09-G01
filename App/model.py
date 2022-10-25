@@ -119,7 +119,13 @@ def newAreaEntry(crime):
     Crea una entrada para el indice de areas reportadas
     """
     # TODO lab 9, crear una entrada para el indice de areas reportadas
-    entry = {"lstcrimes": None, }
+    entry = {"areaIndex": None, "lstcrimes": None}
+    entry["areaIndex"] = m.newMap(numelements=30,
+                                     maptype="PROBING",
+                                     comparefunction=compareAreas)
+    entry["lstcrimes"] = lt.newList("SINGLE_LINKED", compareDates)
+    lt.addLast(entry["lstcrimes"], crime)
+
     return entry
 
 
@@ -128,7 +134,20 @@ def addAreaIndex(areaentry, crime):
     Adiciona un crimen a la lista de crimenes de un area
     """
     # TODO lab 9, adicionar crimen a la lista de crimenes de un area
+    lst = areaentry["lstcrimes"]
+    lt.addLast(lst, crime)
+    areaIndex = areaentry["areaIndex"]
+    areaentry = m.get(areaIndex, crime["REPORTING_AREA"])
+    if (areaentry is None):
+        entry = newAreaEntry(crime["REPORTING_AREA"])
+        lt.addLast(entry["lstareas"], crime)
+        m.put(areaIndex, crime["REPORTING_AREA"], entry)
+    else:
+        entry = me.getValue(areaentry)
+        lt.addLast(entry["lstareas"], crime)
+
     return areaentry
+
 
 
 def updateDateIndex(map, crime):
@@ -276,12 +295,13 @@ def getCrimesByRangeArea(analyzer, initialArea, FinalArea):
     Retorna el numero de crimenes en un rango de areas
     """
     # TODO lab 9, completar la consulta de crimenes por rango de areas
-    lst = om.values(analyzer["areaIndex"], initialDate, finalDate)
-    totalcrimes = 0
-    for lstarea in lt.iterator(lst):
-        totalcrimes += lt.size(lstarea["lstcrimes"])
-
-    return totalcrimes
+    crimearea = om.get(analyzer["areaIndex"], initialArea)
+    if crimearea["key"] is not None:
+        areamap = me.getValue(crimearea)["areaIndex"]
+        numarea = m.get(areamap, offensecode)
+        if numoffenses is not None:
+            return m.size(me.getValue(numoffenses)["lstoffenses"])
+    return 0
 
 
 def getCrimesByRange(analyzer, initialDate, finalDate):
@@ -343,7 +363,12 @@ def compareAreas(area1, area2):
     Compara dos areas
     """
     # area = "REPORTING_AREA"
-    pass
+    if (area1 == area2):
+        return 0
+    elif (area1 > area2):
+        return 1
+    else:
+        return -1
 
 
 def compareOffenses(offense1, offense2):
