@@ -81,6 +81,10 @@ while True:
         print("Mayor Llave: " + str(controller.maxKey(cont)))
         # TODO lab 9, imprimir las propiedades del indice de areas
         # propiedades: altura, elementos y llaves min y max
+        print("Altura del arbol: " + str(controller.indexHeightAreas(cont)))
+        print("Elementos en el arbol: " + str(controller.indexSizeAreas(cont)))
+        print("Menor Llave: " + str(controller.minKeyAreas(cont)))
+        print("Mayor Llave: " + str(controller.maxKeyAreas(cont)))
 
     elif int(inputs[0]) == 3:
         print("\nBuscando crimenes en un rango de fechas: ")
